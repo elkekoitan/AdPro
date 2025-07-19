@@ -130,6 +130,7 @@
 - [ ] 5.3 Build client portal interface
   - Create client-facing dashboard components
   - Implement navigation with permission-based visibility
+
   - Add client-specific analytics views
   - Write tests for client portal functionality
   - _Requirements: 3.3, 3.5, 3.6, 3.7_
@@ -142,7 +143,8 @@
   - Write tests for template management
   - _Requirements: 4.2, 4.7_
 
-- [ ] 6.2 Implement report generation engine
+- [x] 6.2 Implement report generation engine
+
   - Create ReportGenerationService for creating reports
   - Implement data processing for different report types
   - Add export functionality for multiple formats
