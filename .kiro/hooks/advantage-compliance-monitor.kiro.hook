@@ -1,0 +1,21 @@
+{
+  "enabled": true,
+  "name": "AdVantage Compliance Monitor",
+  "description": "Monitors key AdVantage project files and generates comprehensive compliance analysis reports when critical architecture, configuration, or source files are modified. Analyzes structure compliance, technology stack alignment, and module implementation status against project specifications.",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "AdVantage/package.json",
+      "AdVantage/src/**/*.ts",
+      "AdVantage/src/**/*.tsx",
+      "AdVantage/tsconfig.json",
+      "AdVantage/app.json",
+      "docs/*.md"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Analyze the AdVantage project for compliance with the established architecture standards, technology requirements, and module specifications. Generate a comprehensive compliance report similar to the Turkish analysis provided, including:\n\n1. **Structure.md Compliance Analysis** - Check folder structure, missing directories, and architectural alignment\n2. **Tech.md Compliance Analysis** - Verify technology stack, missing dependencies, and version compatibility  \n3. **Module Implementation Status** - Assess progress on MVP, Growth, and Scale phase modules\n4. **Critical Issues Identification** - Highlight blocking issues and TypeScript errors\n5. **Prioritized Action Plan** - Provide specific recommendations with timelines\n6. **Compliance Score** - Overall project health score with category breakdowns\n\nFocus on identifying:\n- Missing critical dependencies (Zustand, React Query, AI clients)\n- Incomplete folder structures (shared/, theme/, domain/value-objects/)\n- TypeScript compilation errors\n- Module completion percentages\n- Technology version mismatches\n- Architecture pattern violations\n\nProvide actionable recommendations with priority levels (CRITICAL, HIGH, MEDIUM) and estimated implementation timeframes."
+  }
+}

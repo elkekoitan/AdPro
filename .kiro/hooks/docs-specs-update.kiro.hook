@@ -1,0 +1,19 @@
+{
+  "enabled": true,
+  "name": "Documentation Update Hook",
+  "description": "Automatically updates docs and .kiro/specs documentation when code writing is finished",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "AdVantage/src/**/*.ts",
+      "AdVantage/src/**/*.tsx",
+      "AdVantage/App.tsx",
+      "AdVantage/package.json"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Code changes have been detected in the AdVantage project. Please review the recent changes and update the documentation in C:\\Users\\qw\\Desktop\\AdMate\\docs and C:\\Users\\qw\\Desktop\\AdMate\\.kiro\\specs to reflect any new features, architectural changes, or implementation updates. Focus on keeping the technical documentation, API specifications, and project status reports current with the latest code implementation."
+  }
+}

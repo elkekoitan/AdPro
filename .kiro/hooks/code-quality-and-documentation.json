@@ -1,0 +1,26 @@
+{
+  "name": "Code Quality & Architecture Documentation Updater",
+  "description": "Ensures error-free code, runs tests, and maintains architecture documentation with visual progress tracking",
+  "triggers": [
+    {
+      "type": "file_saved",
+      "patterns": [
+        "AdVantage/src/**/*.ts",
+        "AdVantage/src/**/*.tsx",
+        "AdVantage/src/**/*.js",
+        "AdVantage/src/**/*.jsx"
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "type": "agent_request",
+      "request": "Yazdığım kodları kontrol et ve şunları yap:\n\n1. **Kod Kalitesi Kontrolü:**\n   - Syntax hatalarını kontrol et\n   - TypeScript tip hatalarını kontrol et\n   - ESLint kurallarına uygunluğu kontrol et\n   - Best practice'lere uygunluğu değerlendir\n   - Hataları varsa düzelt\n\n2. **Test Çalıştırma:**\n   - İlgili modül için unit testleri çalıştır\n   - Test sonuçlarını raporla\n   - Test coverage'ı kontrol et\n   - Eksik testleri belirle\n\n3. **Mimari Dokümantasyon Güncelleme:**\n   - Hangi modülün hangi kısmının tamamlandığını belirle\n   - Architecture tree'yi güncelle\n   - Tamamlanan bileşenleri görsel olarak işaretle\n   - Progress durumunu güncelle\n\n4. **Görsel Dokümantasyon:**\n   - Mermaid diagram ile architecture tree oluştur\n   - Tamamlanan modülleri yeşil renkte göster\n   - Devam eden modülleri sarı renkte göster\n   - Başlanmamış modülleri gri renkte göster\n   - Progress yüzdesini hesapla\n\n5. **Rapor Oluşturma:**\n   - Hangi modülün ne kadarının bittiğini detaylandır\n   - Kod kalitesi skorunu ver\n   - Test coverage raporunu ekle\n   - Sonraki adımları öner\n\nDeğiştirilen dosya: {{file_path}}\nDosya içeriği:\n```\n{{file_content}}\n```\n\nLütfen yukarıdaki adımları takip ederek kapsamlı bir analiz ve güncelleme yap."
+    }
+  ],
+  "settings": {
+    "auto_approve": false,
+    "run_in_background": false,
+    "max_execution_time": 300
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "Module Test Runner",
+  "description": "Runs tests for specific modules when their files are modified",
+  "triggers": [
+    {
+      "type": "file_saved",
+      "patterns": [
+        "AdVantage/src/**/*.ts",
+        "AdVantage/src/**/*.tsx"
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "type": "agent_request",
+      "request": "Bu dosyada değişiklik yaptım, lütfen şunları yap:\n\n1. **Modül Testi:**\n   - Bu modül için unit testleri çalıştır\n   - Test sonuçlarını raporla\n   - Test coverage'ı kontrol et\n\n2. **Kod Kalitesi:**\n   - TypeScript tip hatalarını kontrol et\n   - ESLint kurallarına uygunluğu kontrol et\n   - Kullanılmayan değişkenleri tespit et\n   - 'any' tiplerini tespit et\n\n3. **Düzeltme Önerileri:**\n   - Tespit edilen hataları nasıl düzeltebileceğimi göster\n   - Kod kalitesini artırmak için öneriler sun\n   - Best practice'lere uygun örnek kod göster\n\nDeğiştirilen dosya: {{file_path}}\nDosya içeriği:\n```\n{{file_content}}\n```"
+    }
+  ],
+  "settings": {
+    "auto_approve": false,
+    "run_in_background": false,
+    "max_execution_time": 300
+  }
+}

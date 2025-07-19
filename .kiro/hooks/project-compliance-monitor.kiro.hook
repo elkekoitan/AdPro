@@ -1,0 +1,21 @@
+{
+  "enabled": true,
+  "name": "AdVantage Project Compliance Monitor",
+  "description": "Monitors AdVantage project files for structural and technological compliance with documentation standards, tracking implementation progress and identifying gaps",
+  "version": "1",
+  "when": {
+    "type": "userTriggered",
+    "patterns": [
+      "AdVantage/src/**/*.ts",
+      "AdVantage/src/**/*.tsx",
+      "AdVantage/package.json",
+      "AdVantage/app.json",
+      "AdVantage/tsconfig.json",
+      "docs/*.md"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Analyze the AdVantage project for compliance with structure.md and tech.md standards. Generate a comprehensive compliance report covering:\n\n1. **Structure.md Uyumluluk Analizi** - Check folder structure, naming conventions, Clean Architecture implementation, missing components (shared/, types/, error handling)\n\n2. **Tech.md Uyumluluk Analizi** - Verify technology stack usage, package.json dependencies, AI integrations status, testing framework implementation\n\n3. **Specs Modül Kullanımı Analizi** - Evaluate implementation of recommended modules from specs, feature completion rates, missing functionality\n\n4. **Kritik Eksiklikler ve Öneriler** - Identify critical gaps, prioritized action items, improvement recommendations\n\nProvide percentage scores for each category and overall project compliance. Focus on actionable insights for maintaining architectural standards and feature completeness. Report in Turkish following the established format."
+  }
+}
