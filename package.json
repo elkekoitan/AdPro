@@ -1,0 +1,111 @@
+{
+  "name": "advantage-app",
+  "version": "1.0.0",
+  "description": "AI-powered social commerce platform with intelligent campaign management",
+  "main": "expo-router/entry",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
+    "web": "expo start --web",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:e2e": "detox test",
+    "test:e2e:build": "detox build",
+    "test:e2e:ios": "node e2e/run-tests.js --platform=ios",
+    "test:e2e:android": "node e2e/run-tests.js --platform=android",
+    "test:e2e:auth": "node e2e/run-tests.js --file=auth-flow.e2e.ts",
+    "test:e2e:dashboard": "node e2e/run-tests.js --file=dashboard-navigation.e2e.ts",
+    "test:e2e:campaign": "node e2e/run-tests.js --file=campaign-management.e2e.ts",
+    "test:e2e:workflow": "node e2e/run-tests.js --file=complete-user-workflow.e2e.ts",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    "format": "prettier --write .",
+    "type-check": "tsc --noEmit",
+    "build": "eas build",
+    "build:preview": "eas build --profile preview",
+    "submit": "eas submit",
+    "analyze:bundle": "node scripts/analyze-bundle.js",
+    "analyze:performance": "react-native-performance-monitor",
+    "optimize:images": "npx sharp-cli --input ./assets/images --output ./assets/optimized --resize 50%",
+    "monitor:memory": "react-native-memory-monitor"
+  },
+  "dependencies": {
+    "@expo/vector-icons": "^14.0.0",
+    "@react-navigation/native": "^6.1.9",
+    "@react-navigation/stack": "^6.3.20",
+    "@react-navigation/bottom-tabs": "^6.5.11",
+    "@react-native-async-storage/async-storage": "1.21.0",
+    "@tanstack/react-query": "^5.17.0",
+    "expo": "~50.0.0",
+    "expo-router": "~3.4.0",
+    "expo-status-bar": "~1.11.1",
+    "expo-constants": "~15.4.0",
+    "nativewind": "^4.0.1",
+    "react": "18.2.0",
+    "react-native": "0.73.4",
+    "react-native-gesture-handler": "~2.14.0",
+    "react-native-reanimated": "~3.6.2",
+    "react-native-safe-area-context": "4.8.2",
+    "react-native-screens": "~3.29.0",
+    "react-hook-form": "^7.48.2",
+    "yup": "^1.4.0",
+    "@hookform/resolvers": "^3.3.2",
+    "zustand": "^4.4.7"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0",
+    "@testing-library/jest-native": "^5.4.3",
+    "@testing-library/react-native": "^12.4.2",
+    "@types/jest": "^29.5.8",
+    "@types/node": "^20.10.0",
+    "@types/react": "~18.2.45",
+    "@types/react-test-renderer": "^18.0.7",
+    "@typescript-eslint/eslint-plugin": "^6.13.1",
+    "@typescript-eslint/parser": "^6.13.1",
+    "detox": "^20.13.5",
+    "eslint": "^8.56.0",
+    "eslint-config-expo": "^7.0.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "jest": "^29.7.0",
+    "jest-expo": "~50.0.1",
+    "prettier": "^3.1.0",
+    "react-test-renderer": "18.2.0",
+    "typescript": "^5.3.0"
+  },
+  "jest": {
+    "preset": "jest-expo",
+    "setupFilesAfterEnv": [
+      "@testing-library/jest-native/extend-expect",
+      "<rootDir>/src/shared/utils/test-setup.ts"
+    ],
+    "testMatch": [
+      "**/__tests__/**/*.(ts|tsx|js)",
+      "**/*.(test|spec).(ts|tsx|js)"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.{ts,tsx}",
+      "!src/**/*.d.ts",
+      "!src/**/*.stories.{ts,tsx}",
+      "!src/**/index.ts",
+      "!src/shared/utils/test-*.{ts,tsx}"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 80,
+        "functions": 80,
+        "lines": 80,
+        "statements": 80
+      }
+    },
+    "moduleNameMapping": {
+      "^@/(.*)$": "<rootDir>/src/$1"
+    },
+    "transformIgnorePatterns": [
+      "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg)"
+    ]
+  },
+  "private": true
+}

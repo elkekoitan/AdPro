@@ -1,0 +1,163 @@
+name: CD
+
+on:
+  push:
+    branches: [ main ]
+    tags:
+      - 'v*'
+
+jobs:
+  build-and-test:
+    name: Build and Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npm run lint
+
+      - name: Run TypeScript type checking
+        run: npm run type-check
+
+      - name: Run tests
+        run: npm test
+
+  build-android:
+    name: Build Android
+    runs-on: ubuntu-latest
+    needs: [build-and-test]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '11'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Set up Expo CLI
+        run: npm install -g eas-cli
+
+      - name: Login to Expo
+        run: echo "${{ secrets.EXPO_TOKEN }}" | eas login
+
+      - name: Build Android
+        run: eas build --platform android --non-interactive
+
+  build-ios:
+    name: Build iOS
+    runs-on: macos-latest
+    needs: [build-and-test]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Set up Expo CLI
+        run: npm install -g eas-cli
+
+      - name: Login to Expo
+        run: echo "${{ secrets.EXPO_TOKEN }}" | eas login
+
+      - name: Build iOS
+        run: eas build --platform ios --non-interactive
+
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: [build-android, build-ios]
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Set up Expo CLI
+        run: npm install -g eas-cli
+
+      - name: Login to Expo
+        run: echo "${{ secrets.EXPO_TOKEN }}" | eas login
+
+      - name: Deploy to Staging
+        run: eas update --branch staging --message "Staging deployment from GitHub Actions"
+
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [build-android, build-ios]
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Set up Expo CLI
+        run: npm install -g eas-cli
+
+      - name: Login to Expo
+        run: echo "${{ secrets.EXPO_TOKEN }}" | eas login
+
+      - name: Deploy to Production
+        run: eas update --branch production --message "Production deployment from GitHub Actions"
+
+      - name: Submit to App Store
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: eas submit --platform ios --non-interactive
+
+      - name: Submit to Google Play
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: eas submit --platform android --non-interactive

@@ -1,0 +1,72 @@
+{
+  "cli": {
+    "version": ">= 3.13.3"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "ios": {
+        "resourceClass": "m1-medium"
+      }
+    },
+    "preview": {
+      "distribution": "internal",
+      "ios": {
+        "resourceClass": "m1-medium"
+      },
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "APP_ENV": "staging"
+      }
+    },
+    "production": {
+      "ios": {
+        "resourceClass": "m1-medium"
+      },
+      "android": {
+        "buildType": "app-bundle"
+      },
+      "env": {
+        "APP_ENV": "production"
+      },
+      "autoIncrement": true
+    }
+  },
+  "submit": {
+    "production": {
+      "ios": {
+        "appleId": "your-apple-id@example.com",
+        "ascAppId": "1234567890",
+        "appleTeamId": "AB12CD34EF"
+      },
+      "android": {
+        "serviceAccountKeyPath": "path/to/service-account.json",
+        "track": "production"
+      }
+    }
+  },
+  "updates": {
+    "url": "https://u.expo.dev/your-project-id",
+    "fallbackToCacheTimeout": 0
+  },
+  "preview": {
+    "distribution": "internal",
+    "ios": {
+      "simulator": true
+    },
+    "android": {
+      "buildType": "apk"
+    }
+  },
+  "preview2": {
+    "android": {
+      "gradleCommand": ":app:assembleRelease"
+    }
+  },
+  "preview3": {
+    "developmentClient": true
+  }
+}

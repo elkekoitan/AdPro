@@ -1,0 +1,94 @@
+{
+  "expo": {
+    "name": "AdVantage",
+    "slug": "advantage-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.yourcompany.advantage",
+      "buildNumber": "1",
+      "infoPlist": {
+        "NSCameraUsageDescription": "This app uses the camera to let you upload profile pictures and content images.",
+        "NSPhotoLibraryUsageDescription": "This app uses the photo library to let you upload profile pictures and content images.",
+        "NSFaceIDUsageDescription": "This app uses Face ID to securely authenticate you.",
+        "UIBackgroundModes": [
+          "fetch",
+          "remote-notification"
+        ]
+      },
+      "config": {
+        "usesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.yourcompany.advantage",
+      "versionCode": 1,
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "USE_BIOMETRIC",
+        "USE_FINGERPRINT"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you upload profile pictures and content images."
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "The app uses the camera to let you upload profile pictures and content images."
+        }
+      ],
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "The app uses Face ID to securely authenticate you."
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "your-project-id"
+      }
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/your-project-id"
+    },
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
+    "jsEngine": "hermes"
+  }
+}
