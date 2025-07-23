@@ -17,26 +17,26 @@ import {
   ActivityIndicator,
   Alert,
 } from 'react-native';
-import { AuthStackScreenProps } from '@/presentation/navigation/types';
-import { useFormValidation } from '@/presentation/hooks/useFormValidation';
-import { ValidationRules, ValidationSchemas } from '@/shared/utils/form-validation';
-import { FormInput, EmailInput, PasswordInput } from '@/presentation/components/forms/FormInput';
-import { FormErrorSummary } from '@/presentation/components/forms/FormError';
-import { useNetworkStatus } from '@/presentation/hooks/useNetworkStatus';
-import { useRetry } from '@/presentation/hooks/useRetry';
-import { ErrorBoundary } from '@/presentation/components/error/ErrorBoundary';
-import { NetworkErrorFallback } from '@/presentation/components/error/ErrorFallback';
-import { AuthService } from '@/application/services/AuthService';
-import { SupabaseAuthRepository } from '@/infrastructure/repositories/SupabaseAuthRepository';
-import { MockAuthRepository } from '@/infrastructure/repositories/MockAuthRepository';
-import { Logger } from '@/shared/utils/debug-helpers';
-import { AppError, ErrorCode } from '@/shared/types/errors';
-import { useAuthStore } from '@/application/stores/authStore';
-import { UserValidation } from '@/domain/entities/User';
+import { AuthStackScreenProps } from '../../navigation/types';
+import { useFormValidation } from '../../hooks/useFormValidation';
+import { ValidationRules, ValidationSchemas } from '../../../shared/utils/form-validation';
+import { FormInput, EmailInput, PasswordInput } from '../../components/forms/FormInput';
+import { FormErrorSummary } from '../../components/forms/FormError';
+import { useNetworkStatus } from '../../hooks/useNetworkStatus';
+import { useRetry } from '../../hooks/useRetry';
+import { ErrorBoundary } from '../../components/error/ErrorBoundary';
+import { NetworkErrorFallback } from '../../components/error/ErrorFallback';
+import { AuthService } from '../../../application/services/AuthService';
+import { SupabaseAuthRepository } from '../../../infrastructure/repositories/SupabaseAuthRepository';
+import { MockAuthRepository } from '../../../infrastructure/repositories/MockAuthRepository';
+import { Logger } from '../../../shared/utils/debug-helpers';
+import { AppError, ErrorCode } from '../../../shared/types/errors';
+import { useAuthStore } from '../../../application/stores/authStore';
+import { UserValidation } from '../../../domain/entities/User';
 
-// Initialize auth service with appropriate repository
+// Initialize auth service with real Supabase for testing
 // In a real app, this would be injected via dependency injection
-const authRepository = __DEV__ ? new MockAuthRepository() : new SupabaseAuthRepository();
+const authRepository = new SupabaseAuthRepository();
 const authService = new AuthService(authRepository);
 
 const TAG = 'RegisterScreen';

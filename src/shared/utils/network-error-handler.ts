@@ -271,7 +271,7 @@ export class NetworkErrorHandler {
         appError = ErrorFactory.createError(
           ErrorCode.NETWORK_ERROR,
           userMessage,
-          { originalError: error, context }
+          { originalError: error, ...context }
         );
         break;
       
@@ -279,7 +279,7 @@ export class NetworkErrorHandler {
         appError = ErrorFactory.createError(
           ErrorCode.TIMEOUT_ERROR,
           userMessage,
-          { originalError: error, context }
+          { originalError: error, ...context }
         );
         break;
       
@@ -287,7 +287,7 @@ export class NetworkErrorHandler {
         appError = ErrorFactory.createError(
           ErrorCode.SERVER_ERROR,
           userMessage,
-          { originalError: error, status: error.status, context }
+          { originalError: error, status: error.status, ...context }
         );
         break;
       
@@ -296,25 +296,25 @@ export class NetworkErrorHandler {
           appError = ErrorFactory.createAuthError(
             ErrorCode.UNAUTHORIZED,
             userMessage,
-            { originalError: error, context }
+            { originalError: error, ...context }
           );
         } else if (error.status === 403) {
           appError = ErrorFactory.createAuthError(
             ErrorCode.FORBIDDEN,
             userMessage,
-            { originalError: error, context }
+            { originalError: error, ...context }
           );
         } else if (error.status === 404) {
           appError = ErrorFactory.createError(
             ErrorCode.NOT_FOUND,
             userMessage,
-            { originalError: error, context }
+            { originalError: error, ...context }
           );
         } else {
           appError = ErrorFactory.createError(
             ErrorCode.VALIDATION_ERROR,
             userMessage,
-            { originalError: error, status: error.status, context }
+            { originalError: error, status: error.status, ...context }
           );
         }
         break;
@@ -323,7 +323,7 @@ export class NetworkErrorHandler {
         appError = ErrorFactory.createError(
           ErrorCode.UNKNOWN_ERROR,
           userMessage,
-          { originalError: error, context }
+          { originalError: error, ...context }
         );
     }
     

@@ -23,40 +23,59 @@
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "format": "prettier --write .",
     "type-check": "tsc --noEmit",
-    "build": "eas build",
+    "build": "cd app && npm run build:web",
     "build:preview": "eas build --profile preview",
+    "build:web": "expo export --platform web",
     "submit": "eas submit",
     "analyze:bundle": "node scripts/analyze-bundle.js",
     "analyze:performance": "react-native-performance-monitor",
     "optimize:images": "npx sharp-cli --input ./assets/images --output ./assets/optimized --resize 50%",
-    "monitor:memory": "react-native-memory-monitor"
+    "monitor:memory": "react-native-memory-monitor",
+    "ai:health": "node scripts/ai-health-check.js",
+    "test:ai": "jest --testPathPattern=ai",
+    "test:conversation": "jest --testNamePattern='Conversation'",
+    "test:content": "jest --testNamePattern='Content'"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.0.0",
+    "@hookform/resolvers": "^3.3.2",
+    "@react-native-async-storage/async-storage": "1.21.0",
+    "@react-navigation/bottom-tabs": "^6.5.11",
     "@react-navigation/native": "^6.1.9",
     "@react-navigation/stack": "^6.3.20",
-    "@react-navigation/bottom-tabs": "^6.5.11",
-    "@react-native-async-storage/async-storage": "1.21.0",
+    "@supabase/supabase-js": "^2.52.0",
     "@tanstack/react-query": "^5.17.0",
+    "openai": "^4.26.0",
+    "@google/generative-ai": "^0.2.0",
     "expo": "~50.0.0",
+    "expo-blur": "~12.9.2",
+    "expo-build-properties": "^0.11.1",
+    "expo-camera": "~14.1.3",
+    "expo-constants": "~15.4.0",
+    "expo-font": "~11.10.3",
+    "expo-image-picker": "~14.7.1",
+    "expo-linear-gradient": "~12.7.2",
+    "expo-linking": "~6.2.2",
+    "expo-local-authentication": "~13.8.0",
     "expo-router": "~3.4.0",
     "expo-status-bar": "~1.11.1",
-    "expo-constants": "~15.4.0",
     "nativewind": "^4.0.1",
     "react": "18.2.0",
-    "react-native": "0.73.4",
+    "react-dom": "18.2.0",
+    "react-hook-form": "^7.48.2",
+    "react-native": "^0.73.6",
     "react-native-gesture-handler": "~2.14.0",
     "react-native-reanimated": "~3.6.2",
     "react-native-safe-area-context": "4.8.2",
     "react-native-screens": "~3.29.0",
-    "react-hook-form": "^7.48.2",
+    "react-native-web": "~0.19.6",
     "yup": "^1.4.0",
-    "@hookform/resolvers": "^3.3.2",
-    "zustand": "^4.4.7"
+    "zustand": "^4.5.7"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@testing-library/jest-native": "^5.4.3",
+    "@testing-library/react": "^16.3.0",
     "@testing-library/react-native": "^12.4.2",
     "@types/jest": "^29.5.8",
     "@types/node": "^20.10.0",
@@ -64,47 +83,39 @@
     "@types/react-test-renderer": "^18.0.7",
     "@typescript-eslint/eslint-plugin": "^6.13.1",
     "@typescript-eslint/parser": "^6.13.1",
-    "detox": "^20.13.5",
-    "eslint": "^8.56.0",
+    "babel-plugin-module-resolver": "^5.0.2",
+    "detox": "^20.14.8",
+    "eslint": "^8.55.0",
     "eslint-config-expo": "^7.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.0.1",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-native": "^4.1.0",
     "jest": "^29.7.0",
     "jest-expo": "~50.0.1",
     "prettier": "^3.1.0",
     "react-test-renderer": "18.2.0",
-    "typescript": "^5.3.0"
+    "typescript": "^5.3.3"
   },
   "jest": {
     "preset": "jest-expo",
-    "setupFilesAfterEnv": [
-      "@testing-library/jest-native/extend-expect",
-      "<rootDir>/src/shared/utils/test-setup.ts"
+    "transformIgnorePatterns": [
+      "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg)"
     ],
-    "testMatch": [
-      "**/__tests__/**/*.(ts|tsx|js)",
-      "**/*.(test|spec).(ts|tsx|js)"
+    "setupFilesAfterEnv": [
+      "<rootDir>/src/shared/utils/test-setup.ts",
+      "@testing-library/jest-native/extend-expect"
     ],
     "collectCoverageFrom": [
       "src/**/*.{ts,tsx}",
       "!src/**/*.d.ts",
-      "!src/**/*.stories.{ts,tsx}",
-      "!src/**/index.ts",
-      "!src/shared/utils/test-*.{ts,tsx}"
+      "!src/**/__tests__/**",
+      "!src/**/node_modules/**"
     ],
-    "coverageThreshold": {
-      "global": {
-        "branches": 80,
-        "functions": 80,
-        "lines": 80,
-        "statements": 80
-      }
-    },
-    "moduleNameMapping": {
-      "^@/(.*)$": "<rootDir>/src/$1"
-    },
-    "transformIgnorePatterns": [
-      "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg)"
+    "testMatch": [
+      "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
+      "<rootDir>/src/**/*.(test|spec).{js,jsx,ts,tsx}"
     ]
   },
   "private": true

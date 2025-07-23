@@ -1,47 +1,66 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "lib": [
+      "ES2020",
+      "DOM",
+      "DOM.Iterable"
+    ],
     "module": "ESNext",
     "moduleResolution": "node",
     "strict": false,
     "noImplicitAny": false,
     "strictNullChecks": false,
     "strictFunctionTypes": false,
+    "skipLibCheck": true,
     "noImplicitReturns": false,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedIndexedAccess": false,
     "exactOptionalPropertyTypes": false,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "skipLibCheck": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "baseUrl": ".",
+    "baseUrl": "./",
     "paths": {
-      "@/*": ["src/*"],
-      "@/components/*": ["src/presentation/components/*"],
-      "@/screens/*": ["src/presentation/screens/*"],
-      "@/services/*": ["src/application/services/*"],
-      "@/stores/*": ["src/application/stores/*"],
-      "@/utils/*": ["src/shared/utils/*"],
-      "@/types/*": ["src/shared/types/*"]
+      "@/*": ["./src/*"],
+      "@/components/*": ["./src/presentation/components/*"],
+      "@/screens/*": ["./src/presentation/screens/*"],
+      "@/hooks/*": ["./src/presentation/hooks/*"],
+      "@/navigation/*": ["./src/presentation/navigation/*"],
+      "@/services/*": ["./src/application/services/*"],
+      "@/stores/*": ["./src/application/stores/*"],
+      "@/usecases/*": ["./src/application/usecases/*"],
+      "@/repositories/*": ["./src/infrastructure/repositories/*"],
+      "@/config/*": ["./src/infrastructure/config/*"],
+      "@/api/*": ["./src/infrastructure/api/*"],
+      "@/domain/*": ["./src/domain/*"],
+      "@/entities/*": ["./src/domain/entities/*"],
+      "@/value-objects/*": ["./src/domain/value-objects/*"],
+      "@/shared/*": ["./src/shared/*"],
+      "@/utils/*": ["./src/shared/utils/*"],
+      "@/types/*": ["./src/shared/types/*"],
+      "@/constants/*": ["./src/shared/constants/*"]
     }
   },
   "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    ".expo/types/**/*.ts",
-    "expo-env.d.ts",
+    "src/**/*.ts",
+    "src/**/*.tsx",
     "src/types/**/*.d.ts",
-    "src/types/react-native-env.d.ts"
+    "App.tsx",
+    "app.json"
   ],
   "exclude": [
     "node_modules",
     "babel.config.js",
     "metro.config.js",
-    "jest.config.js"
-  ]
+    "jest.config.js",
+    ".expo",
+    "dist",
+    "coverage",
+    "e2e"
+  ],
+  "extends": "expo/tsconfig.base"
 }

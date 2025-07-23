@@ -9,6 +9,7 @@ export enum ErrorCode {
   NETWORK_ERROR = 'NETWORK_ERROR',
   TIMEOUT_ERROR = 'TIMEOUT_ERROR',
   VALIDATION_ERROR = 'VALIDATION_ERROR',
+  PARSE_ERROR = 'PARSE_ERROR',
 
   // Kimlik doğrulama hataları
   INVALID_CREDENTIALS = 'INVALID_CREDENTIALS',
@@ -28,8 +29,10 @@ export enum ErrorCode {
   // API hataları
   BAD_REQUEST = 'BAD_REQUEST',
   NOT_FOUND = 'NOT_FOUND',
+  SERVER_ERROR = 'SERVER_ERROR',
   INTERNAL_SERVER_ERROR = 'INTERNAL_SERVER_ERROR',
   SERVICE_UNAVAILABLE = 'SERVICE_UNAVAILABLE',
+  RATE_LIMIT_EXCEEDED = 'RATE_LIMIT_EXCEEDED',
 
   // İş mantığı hataları
   BUSINESS_RULE_VIOLATION = 'BUSINESS_RULE_VIOLATION',
@@ -50,7 +53,12 @@ export interface ErrorContext {
   requestId?: string;
   screenName?: string;
   actionType?: string;
+  type?: string;
+  reportId?: string;
+  insightId?: string;
   additionalData?: Record<string, any>;
+  originalError?: any;
+  status?: number;
 }
 
 /**
@@ -205,6 +213,7 @@ export const ErrorMessages = {
   [ErrorCode.NETWORK_ERROR]: 'Ağ bağlantısı hatası',
   [ErrorCode.TIMEOUT_ERROR]: 'İstek zaman aşımına uğradı',
   [ErrorCode.VALIDATION_ERROR]: 'Girilen bilgiler geçersiz',
+  [ErrorCode.PARSE_ERROR]: 'Veri ayrıştırma hatası',
   [ErrorCode.INVALID_CREDENTIALS]: 'E-posta veya şifre hatalı',
   [ErrorCode.USER_NOT_FOUND]: 'Kullanıcı bulunamadı',
   [ErrorCode.EMAIL_ALREADY_EXISTS]: 'Bu e-posta adresi zaten kullanımda',
@@ -218,8 +227,10 @@ export const ErrorMessages = {
   [ErrorCode.INSUFFICIENT_PERMISSIONS]: 'Yetersiz izin',
   [ErrorCode.BAD_REQUEST]: 'Hatalı istek',
   [ErrorCode.NOT_FOUND]: 'Kaynak bulunamadı',
+  [ErrorCode.SERVER_ERROR]: 'Sunucu hatası',
   [ErrorCode.INTERNAL_SERVER_ERROR]: 'Sunucu hatası',
   [ErrorCode.SERVICE_UNAVAILABLE]: 'Servis şu anda kullanılamıyor',
+  [ErrorCode.RATE_LIMIT_EXCEEDED]: 'İstek sınırı aşıldı',
   [ErrorCode.BUSINESS_RULE_VIOLATION]: 'İş kuralı ihlali',
   [ErrorCode.RESOURCE_CONFLICT]: 'Kaynak çakışması',
   [ErrorCode.QUOTA_EXCEEDED]: 'Kota aşıldı',

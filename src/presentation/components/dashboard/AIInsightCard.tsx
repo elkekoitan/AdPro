@@ -17,6 +17,9 @@ import {
   TouchableWithoutFeedback
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+
+// Type alias to handle Ionicons typing issues
+const IoniconsIcon = Ionicons as any;
 import { AIInsight } from '../../../domain/entities/Dashboard';
 
 // Enable LayoutAnimation for Android
@@ -168,7 +171,7 @@ export function AIInsightCard({ insight, onDismiss, onActionPress }: AIInsightCa
           <View style={styles.header}>
             <View style={styles.typeContainer}>
               <View style={[styles.iconContainer, { backgroundColor: `${priorityColor}20` }]}>
-                <Ionicons name={typeIcon as any} size={18} color={priorityColor} />
+                <IoniconsIcon name={typeIcon as any} size={18} color={priorityColor} />
               </View>
               <Text style={styles.title}>{insight.title}</Text>
             </View>
@@ -179,12 +182,12 @@ export function AIInsightCard({ insight, onDismiss, onActionPress }: AIInsightCa
                 onPress={toggleExpanded}
               >
                 <Animated.View style={{ transform: [{ rotate }] }}>
-                  <Ionicons name="chevron-down" size={18} color="#999" />
+                  <IoniconsIcon name="chevron-down" size={18} color="#999" />
                 </Animated.View>
               </TouchableOpacity>
               
               <TouchableOpacity style={styles.dismissButton} onPress={onDismiss}>
-                <Ionicons name="close" size={18} color="#999" />
+                <IoniconsIcon name="close" size={18} color="#999" />
               </TouchableOpacity>
             </View>
           </View>
@@ -216,9 +219,9 @@ export function AIInsightCard({ insight, onDismiss, onActionPress }: AIInsightCa
                   style={styles.actionButton}
                   onPress={() => handleActionPress(action)}
                 >
-                  <Ionicons name="checkmark-circle-outline" size={14} color={priorityColor} />
+                  <IoniconsIcon name="checkmark-circle-outline" size={14} color={priorityColor} />
                   <Text style={styles.actionText}>{action}</Text>
-                  <Ionicons name="arrow-forward" size={12} color="#999" />
+                  <IoniconsIcon name="arrow-forward" size={12} color="#999" />
                 </TouchableOpacity>
               )}
             </View>
@@ -228,7 +231,7 @@ export function AIInsightCard({ insight, onDismiss, onActionPress }: AIInsightCa
       
       <View style={styles.footer}>
         <View style={styles.categoryContainer}>
-          <Ionicons name={categoryIcon as any} size={14} color="#666" />
+          <IoniconsIcon name={categoryIcon as any} size={14} color="#666" />
           <Text style={styles.categoryText}>{insight.category}</Text>
         </View>
         

@@ -3,7 +3,8 @@
  * Tests for the network status hook
  */
 
-import { renderHook, act } from '@testing-library/react-hooks';
+import * as React from 'react';
+import { renderHook, act } from '@testing-library/react';
 import { useNetworkStatus, NetworkStatusProvider, useNetworkStatusContext } from '../useNetworkStatus';
 import { NetworkUtils } from '../../../shared/utils/network-error-handler';
 import { Logger } from '../../../shared/utils/debug-helpers';
@@ -208,9 +209,8 @@ describe('NetworkStatusContext', () => {
       useNetworkStatus: () => mockContextValue,
     }));
     
-    const wrapper = ({ children }) => (
-      <NetworkStatusProvider>{children}</NetworkStatusProvider>
-    );
+    const wrapper = ({ children }) => 
+      React.createElement(NetworkStatusProvider, null, children);
     
     const { result } = renderHook(() => useNetworkStatusContext(), { wrapper });
     

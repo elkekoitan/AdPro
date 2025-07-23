@@ -10,12 +10,12 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
-  TextInputProps,
 } from 'react-native';
 import { FormError, ValidationStatus } from './FormError';
 
-interface FormInputProps extends TextInputProps {
+interface FormInputProps {
   label?: string;
+  placeholder?: string;
   error?: string;
   touched?: boolean;
   isValid?: boolean;
@@ -29,16 +29,29 @@ interface FormInputProps extends TextInputProps {
   inputStyle?: any;
   errorStyle?: any;
   showValidationStatus?: boolean;
+  value?: string;
   onChangeText?: (text: string) => void;
   onBlur?: () => void;
   onFocus?: () => void;
+  secureTextEntry?: boolean;
+  keyboardType?: string;
+  autoCapitalize?: "none" | "sentences" | "words" | "characters";
+  autoCorrect?: boolean;
+  autoCompleteType?: string;
+  textContentType?: string;
+  multiline?: boolean;
+  editable?: boolean;
+  numberOfLines?: number;
+  maxLength?: number;
 }
 
 /**
- * Enhanced text input with validation support
+ * Base FormInput Component
+ * Temel form input component'i
  */
-export const FormInput: React.FC<FormInputProps> = ({
+export function FormInput({
   label,
+  placeholder,
   error,
   touched = false,
   isValid = false,
@@ -51,17 +64,13 @@ export const FormInput: React.FC<FormInputProps> = ({
   labelStyle,
   inputStyle,
   errorStyle,
-  showValidationStatus = false,
-  onChangeText,
-  onBlur,
+  showValidationStatus = true,
   onFocus,
-  ...textInputProps
-}) => {
+  onBlur,
+  ...props
+}: FormInputProps) {
   const [isFocused, setIsFocused] = useState(false);
-  const inputRef = useRef<TextInput>(null);
-
-  const hasError = touched && !!error;
-  const showError = hasError && !isFocused;
+  const inputRef = useRef<typeof TextInput>(null);
 
   const handleFocus = () => {
     setIsFocused(true);
@@ -72,6 +81,9 @@ export const FormInput: React.FC<FormInputProps> = ({
     setIsFocused(false);
     onBlur?.();
   };
+
+  const hasError = touched && !!error;
+  const isSuccess = touched && isValid && !error;
 
   const getBorderColor = () => {
     if (hasError) return '#dc3545';
@@ -120,10 +132,10 @@ export const FormInput: React.FC<FormInputProps> = ({
             inputStyle,
           ]}
           placeholderTextColor="#6c757d"
-          onChangeText={onChangeText}
+          onChangeText={props.onChangeText}
           onFocus={handleFocus}
           onBlur={handleBlur}
-          {...textInputProps}
+          {...props}
         />
 
         {rightIcon && (
@@ -133,15 +145,15 @@ export const FormInput: React.FC<FormInputProps> = ({
         )}
       </View>
 
-      {helpText && !showError && (
+      {helpText && !hasError && (
         <Text style={styles.helpText}>{helpText}</Text>
       )}
 
-      <FormError
-        error={error}
-        visible={showError}
-        style={errorStyle}
-      />
+              <FormError
+          error={error}
+          visible={!!hasError}
+          style={errorStyle}
+        />
     </View>
   );
 };

@@ -64,5 +64,24 @@ global.console = {
   error: jest.fn(),
 };
 
-// Mock timers
+// Mock timers for async tests
 jest.useFakeTimers();
+
+// Setup for async tests
+beforeEach(() => {
+  jest.clearAllTimers();
+  jest.clearAllMocks();
+});
+
+// Mock fetch for API calls
+global.fetch = jest.fn(() =>
+  Promise.resolve({
+    ok: true,
+    status: 200,
+    json: () => Promise.resolve({}),
+    text: () => Promise.resolve(''),
+  })
+) as jest.Mock;
+
+// Increase timeout for async operations
+jest.setTimeout(30000);

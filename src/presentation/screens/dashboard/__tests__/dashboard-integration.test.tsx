@@ -6,7 +6,7 @@
 import React from 'react';
 import { render, fireEvent, waitFor, act } from '@testing-library/react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-stack/stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import { MainDashboardScreen } from '@/presentation/screens/dashboard/MainDashboardScreen';
 import { DashboardService } from '@/application/services/DashboardService';
 import { AnalyticsService } from '@/application/services/AnalyticsService';
@@ -456,4 +456,3 @@ describe('Dashboard Integration Tests', () => {
     });
   });
 });
-</content>

@@ -15,23 +15,23 @@ import {
   ActivityIndicator,
   FlatList,
 } from 'react-native';
-import { AuthStackScreenProps } from '@/presentation/navigation/types';
-import { useFormValidation } from '@/presentation/hooks/useFormValidation';
-import { ValidationRules } from '@/shared/utils/form-validation';
-import { FormInput } from '@/presentation/components/forms/FormInput';
-import { useNetworkStatus } from '@/presentation/hooks/useNetworkStatus';
-import { useRetry } from '@/presentation/hooks/useRetry';
-import { ErrorBoundary } from '@/presentation/components/error/ErrorBoundary';
-import { NetworkErrorFallback } from '@/presentation/components/error/ErrorFallback';
-import { AuthService } from '@/application/services/AuthService';
-import { SupabaseAuthRepository } from '@/infrastructure/repositories/SupabaseAuthRepository';
-import { MockAuthRepository } from '@/infrastructure/repositories/MockAuthRepository';
-import { Logger } from '@/shared/utils/debug-helpers';
-import { AppError, ErrorCode } from '@/shared/types/errors';
+import { AuthStackScreenProps } from '../../navigation/types';
+import { useFormValidation } from '../../hooks/useFormValidation';
+import { ValidationRules } from '../../../shared/utils/form-validation';
+import { FormInput } from '../../components/forms/FormInput';
+import { useNetworkStatus } from '../../hooks/useNetworkStatus';
+import { useRetry } from '../../hooks/useRetry';
+import { ErrorBoundary } from '../../components/error/ErrorBoundary';
+import { NetworkErrorFallback } from '../../components/error/ErrorFallback';
+import { AuthService } from '../../../application/services/AuthService';
+import { SupabaseAuthRepository } from '../../../infrastructure/repositories/SupabaseAuthRepository';
+import { MockAuthRepository } from '../../../infrastructure/repositories/MockAuthRepository';
+import { Logger } from '../../../shared/utils/debug-helpers';
+import { AppError, ErrorCode } from '../../../shared/types/errors';
 
-// Initialize auth service with appropriate repository
+// Initialize auth service with real Supabase for testing
 // In a real app, this would be injected via dependency injection
-const authRepository = __DEV__ ? new MockAuthRepository() : new SupabaseAuthRepository();
+const authRepository = new SupabaseAuthRepository();
 const authService = new AuthService(authRepository);
 
 const TAG = 'OnboardingScreen';
@@ -81,7 +81,7 @@ export const OnboardingScreen: React.FC<AuthStackScreenProps<'Onboarding'>> = ({
   const [selectedIndustry, setSelectedIndustry] = useState<string | null>(null);
   const { isConnected } = useNetworkStatus();
   const { execute: executeWithRetry, isRetrying, canRetry } = useRetry();
-  const scrollViewRef = useRef<FlatList>(null);
+  const scrollViewRef = useRef<any>(null);
 
   // Form validation
   const {

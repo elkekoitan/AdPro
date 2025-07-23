@@ -426,4 +426,3 @@ describe('Authentication Flow Integration', () => {
     });
   });
 });
-</content>

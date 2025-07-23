@@ -161,7 +161,7 @@ export function CampaignCard({ campaign, onPress, isHighlighted = false }: Campa
         <View style={styles.header}>
           <View style={styles.platformContainer}>
             <View style={[styles.platformIconContainer, { backgroundColor: statusColor }]}>
-              <Ionicons name={platformIcon as any} size={16} color="#FFFFFF" />
+                              <Ionicons name={platformIcon as any} size={16} color="#FFFFFF" />
             </View>
             <Text style={styles.platformText}>{campaign.platform}</Text>
           </View>

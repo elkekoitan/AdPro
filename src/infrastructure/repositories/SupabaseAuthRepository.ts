@@ -20,28 +20,19 @@ import {
   ErrorContext,
 } from '../../shared/types/errors';
 import { Logger } from '../../shared/utils/debug-helpers';
-
-/**
- * Supabase client mock'u (gerçek uygulamada @supabase/supabase-js kullanılacak)
- */
-interface SupabaseClient {
-  auth: {
-    signInWithPassword: (credentials: { email: string; password: string }) => Promise<any>;
-    signUp: (data: { email: string; password: string; options?: any }) => Promise<any>;
-    signOut: () => Promise<any>;
-    getUser: () => Promise<any>;
-    refreshSession: (refreshToken: string) => Promise<any>;
-    resetPasswordForEmail: (email: string) => Promise<any>;
-    updateUser: (attributes: any) => Promise<any>;
-  };
-}
+import { supabase, supabaseConfig } from '../config/supabase';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
 export class SupabaseAuthRepository implements IAuthRepository {
   private supabase: SupabaseClient;
   private readonly TAG = 'SupabaseAuthRepository';
 
-  constructor(supabaseClient: SupabaseClient) {
-    this.supabase = supabaseClient;
+  constructor() {
+    this.supabase = supabase;
+    Logger.info(this.TAG, 'Supabase Auth Repository initialized', {
+      configured: supabaseConfig.isConfigured,
+      url: supabaseConfig.url,
+    });
   }
 
   /**
@@ -237,7 +228,7 @@ export class SupabaseAuthRepository implements IAuthRepository {
     try {
       Logger.debug(this.TAG, 'Token yenileniyor');
 
-      const { data, error } = await this.supabase.auth.refreshSession(refreshToken);
+      const { data, error } = await this.supabase.auth.refreshSession({ refresh_token: refreshToken });
 
       if (error) {
         Logger.error(this.TAG, 'Token yenileme hatası', error);

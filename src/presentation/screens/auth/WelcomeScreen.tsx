@@ -14,8 +14,8 @@ import {
   Dimensions,
   ScrollView,
 } from 'react-native';
-import { AuthStackScreenProps } from '@/presentation/navigation/types';
-import { ErrorBoundary } from '@/presentation/components/error/ErrorBoundary';
+import { AuthStackScreenProps } from '../../navigation/types';
+import { ErrorBoundary } from '../../components/error/ErrorBoundary';
 
 const { width, height } = Dimensions.get('window');
 

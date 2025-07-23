@@ -3,7 +3,13 @@
  * React hatalarını yakalamak ve kullanıcı dostu hata ekranları göstermek için
  */
 
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import React from 'react';
+
+// React 18.2.0 compatible types
+type ReactNode = React.ReactNode;
+interface ErrorInfo {
+  componentStack: string;
+}
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { ErrorCapture } from '@/shared/utils/error-tracker';
 import { Logger } from '@/shared/utils/debug-helpers';
@@ -27,7 +33,7 @@ interface State {
   retryCount: number;
 }
 
-export class ErrorBoundary extends Component<Props, State> {
+export class ErrorBoundary extends React.Component<Props, State> {
   private readonly maxRetries = 3;
 
   constructor(props: Props) {

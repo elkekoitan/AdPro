@@ -15,6 +15,7 @@ import {
   Alert
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+const IoniconsIcon = Ionicons as any;
 import { useNavigation } from '@react-navigation/native';
 import type { NavigationProp } from '@react-navigation/native';
 import type { ProfileStackParamList } from '../../navigation/types';
@@ -96,7 +97,7 @@ export function ProfileScreen() {
               </View>
             )}
             <TouchableOpacity style={styles.editAvatarButton} onPress={handleEditProfile}>
-              <Ionicons name="camera" size={16} color="#FFFFFF" />
+              <IoniconsIcon name="camera" size={16} color="#FFFFFF" />
             </TouchableOpacity>
           </View>
           
@@ -105,7 +106,7 @@ export function ProfileScreen() {
           
           <View style={styles.subscriptionBadge}>
             <Text style={styles.subscriptionText}>
-              {user.subscription.plan.charAt(0).toUpperCase() + user.subscription.plan.slice(1)}
+              {user.subscriptionTier?.charAt(0).toUpperCase() + user.subscriptionTier?.slice(1)}
             </Text>
           </View>
         </View>
@@ -113,17 +114,17 @@ export function ProfileScreen() {
         {/* Action Buttons */}
         <View style={styles.actionButtons}>
           <TouchableOpacity style={styles.actionButton} onPress={handleEditProfile}>
-            <Ionicons name="person" size={20} color="#007AFF" />
+            <IoniconsIcon name="person" size={20} color="#007AFF" />
             <Text style={styles.actionButtonText}>Profili Düzenle</Text>
           </TouchableOpacity>
           
           <TouchableOpacity style={styles.actionButton} onPress={handleNavigateToSettings}>
-            <Ionicons name="settings" size={20} color="#007AFF" />
+            <IoniconsIcon name="settings" size={20} color="#007AFF" />
             <Text style={styles.actionButtonText}>Ayarlar</Text>
           </TouchableOpacity>
           
           <TouchableOpacity style={styles.actionButton} onPress={handleNavigateToAIAgent}>
-            <Ionicons name="chatbubble-ellipses" size={20} color="#007AFF" />
+            <IoniconsIcon name="chatbubble-ellipses" size={20} color="#007AFF" />
             <Text style={styles.actionButtonText}>AI Asistan</Text>
           </TouchableOpacity>
         </View>
@@ -133,13 +134,13 @@ export function ProfileScreen() {
           <Text style={styles.sectionTitle}>Hesap Bilgileri</Text>
           
           <View style={styles.infoItem}>
-            <Ionicons name="mail" size={20} color="#666" style={styles.infoIcon} />
+            <IoniconsIcon name="mail" size={20} color="#666" style={styles.infoIcon} />
             <View style={styles.infoContent}>
               <Text style={styles.infoLabel}>E-posta</Text>
               <Text style={styles.infoValue}>{user.email}</Text>
             </View>
             <View style={styles.verificationBadge}>
-              <Ionicons 
+              <IoniconsIcon 
                 name={user.emailVerified ? "checkmark-circle" : "alert-circle"} 
                 size={16} 
                 color={user.emailVerified ? "#4CAF50" : "#FFC107"} 
@@ -154,7 +155,7 @@ export function ProfileScreen() {
           </View>
           
           <View style={styles.infoItem}>
-            <Ionicons name="call" size={20} color="#666" style={styles.infoIcon} />
+            <IoniconsIcon name="call" size={20} color="#666" style={styles.infoIcon} />
             <View style={styles.infoContent}>
               <Text style={styles.infoLabel}>Telefon</Text>
               <Text style={styles.infoValue}>
@@ -163,7 +164,7 @@ export function ProfileScreen() {
             </View>
             {user.phoneNumber && (
               <View style={styles.verificationBadge}>
-                <Ionicons 
+                <IoniconsIcon 
                   name={user.phoneVerified ? "checkmark-circle" : "alert-circle"} 
                   size={16} 
                   color={user.phoneVerified ? "#4CAF50" : "#FFC107"} 
@@ -179,7 +180,7 @@ export function ProfileScreen() {
           </View>
           
           <View style={styles.infoItem}>
-            <Ionicons name="calendar" size={20} color="#666" style={styles.infoIcon} />
+            <IoniconsIcon name="calendar" size={20} color="#666" style={styles.infoIcon} />
             <View style={styles.infoContent}>
               <Text style={styles.infoLabel}>Üyelik Tarihi</Text>
               <Text style={styles.infoValue}>
@@ -189,7 +190,7 @@ export function ProfileScreen() {
           </View>
           
           <View style={styles.infoItem}>
-            <Ionicons name="time" size={20} color="#666" style={styles.infoIcon} />
+            <IoniconsIcon name="time" size={20} color="#666" style={styles.infoIcon} />
             <View style={styles.infoContent}>
               <Text style={styles.infoLabel}>Son Giriş</Text>
               <Text style={styles.infoValue}>
@@ -219,7 +220,7 @@ export function ProfileScreen() {
                   />
                 ) : (
                   <View style={styles.businessLogoPlaceholder}>
-                    <Ionicons name="business" size={24} color="#007AFF" />
+                    <IoniconsIcon name="business" size={24} color="#007AFF" />
                   </View>
                 )}
                 
@@ -237,12 +238,12 @@ export function ProfileScreen() {
                 onPress={handleBusinessProfile}
               >
                 <Text style={styles.businessButtonText}>İşletme Profilini Görüntüle</Text>
-                <Ionicons name="chevron-forward" size={16} color="#007AFF" />
+                <IoniconsIcon name="chevron-forward" size={16} color="#007AFF" />
               </TouchableOpacity>
             </>
           ) : (
             <View style={styles.emptyBusinessContainer}>
-              <Ionicons name="business" size={40} color="#CCC" />
+              <IoniconsIcon name="business" size={40} color="#CCC" />
               <Text style={styles.emptyBusinessText}>
                 Henüz bir işletme profili oluşturmadınız
               </Text>
@@ -261,7 +262,7 @@ export function ProfileScreen() {
           <Text style={styles.sectionTitle}>Tercihler</Text>
           
           <View style={styles.preferenceItem}>
-            <Ionicons name="globe" size={20} color="#666" style={styles.preferenceIcon} />
+            <IoniconsIcon name="globe" size={20} color="#666" style={styles.preferenceIcon} />
             <View style={styles.preferenceContent}>
               <Text style={styles.preferenceLabel}>Dil</Text>
               <Text style={styles.preferenceValue}>
@@ -269,12 +270,12 @@ export function ProfileScreen() {
               </Text>
             </View>
             <TouchableOpacity style={styles.preferenceEditButton} onPress={handleNavigateToSettings}>
-              <Ionicons name="pencil" size={16} color="#007AFF" />
+              <IoniconsIcon name="pencil" size={16} color="#007AFF" />
             </TouchableOpacity>
           </View>
           
           <View style={styles.preferenceItem}>
-            <Ionicons name="notifications" size={20} color="#666" style={styles.preferenceIcon} />
+            <IoniconsIcon name="notifications" size={20} color="#666" style={styles.preferenceIcon} />
             <View style={styles.preferenceContent}>
               <Text style={styles.preferenceLabel}>Bildirimler</Text>
               <Text style={styles.preferenceValue}>
@@ -282,12 +283,12 @@ export function ProfileScreen() {
               </Text>
             </View>
             <TouchableOpacity style={styles.preferenceEditButton} onPress={handleNavigateToSettings}>
-              <Ionicons name="pencil" size={16} color="#007AFF" />
+              <IoniconsIcon name="pencil" size={16} color="#007AFF" />
             </TouchableOpacity>
           </View>
           
           <View style={styles.preferenceItem}>
-            <Ionicons name="moon" size={20} color="#666" style={styles.preferenceIcon} />
+            <IoniconsIcon name="moon" size={20} color="#666" style={styles.preferenceIcon} />
             <View style={styles.preferenceContent}>
               <Text style={styles.preferenceLabel}>Tema</Text>
               <Text style={styles.preferenceValue}>
@@ -299,8 +300,8 @@ export function ProfileScreen() {
               </Text>
             </View>
             <TouchableOpacity style={styles.preferenceEditButton} onPress={handleNavigateToSettings}>
-              <Ionicons name="pencil" size={16} color="#007AFF" />
-            </TouchableOpacity>
+                <IoniconsIcon name="pencil" size={16} color="#007AFF" />
+              </TouchableOpacity>
           </View>
         </View>
 
@@ -314,7 +315,7 @@ export function ProfileScreen() {
             <ActivityIndicator size="small" color="#FFFFFF" />
           ) : (
             <>
-              <Ionicons name="log-out" size={18} color="#FFFFFF" />
+              <IoniconsIcon name="log-out" size={18} color="#FFFFFF" />
               <Text style={styles.logoutButtonText}>Çıkış Yap</Text>
             </>
           )}

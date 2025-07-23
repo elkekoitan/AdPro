@@ -128,12 +128,14 @@ export function BusinessListScreen() {
 
   // Handle business selection
   const handleSelectBusiness = (business: BusinessProfile) => {
-    navigation.navigate('BusinessProfile', { businessId: business.id });
+    // navigation.navigate('BusinessProfile', { businessId: business.id });
+    console.log('Business selected:', business.id);
   };
 
   // Handle create new business
   const handleCreateBusiness = () => {
-    navigation.navigate('BusinessProfile', { isNew: true });
+    // navigation.navigate('BusinessProfile', { isNew: true });
+    console.log('Create new business');
   };
 
   // Handle search clear

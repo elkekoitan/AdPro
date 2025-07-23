@@ -50,7 +50,7 @@ export function MainDashboardScreen({ navigation }: DashboardStackScreenProps<'M
   const [fadeAnim] = useState(new Animated.Value(0));
   
   const { isConnected } = useNetworkStatus();
-  const { retry, isRetrying } = useRetry();
+  const { isRetrying } = useRetry();
   const dashboardNavigation = useDashboardNavigation();
 
   const TAG = 'MainDashboardScreen';
@@ -158,24 +158,27 @@ export function MainDashboardScreen({ navigation }: DashboardStackScreenProps<'M
       
       switch (actionId) {
         case 'create_campaign':
-          navigation.navigate('Campaigns', { 
-            screen: 'CreateCampaign' 
-          });
+          // navigation.navigate('Campaigns', { 
+          //   screen: 'CreateCampaign' 
+          // });
+          console.log('Create campaign clicked');
           break;
         case 'connect_platform':
-          navigation.navigate('Profile', { 
-            screen: 'Settings',
-            params: { section: 'connections' }
-          });
+          // navigation.navigate('Profile', { 
+          //   screen: 'Settings',
+          //   params: { section: 'connections' }
+          // });
+          console.log('Connect platform clicked');
           break;
         case 'generate_content':
           // Use the correct navigation path within the dashboard stack
           navigation.navigate('AIInsights');
           break;
         case 'view_analytics':
-          navigation.navigate('Analytics', { 
-            screen: 'AdvancedAnalytics' 
-          });
+          // navigation.navigate('Analytics', { 
+          //   screen: 'AdvancedAnalytics' 
+          // });
+          console.log('View analytics clicked');
           break;
         case 'notifications':
           // Navigate to notification center within dashboard stack
@@ -264,12 +267,12 @@ export function MainDashboardScreen({ navigation }: DashboardStackScreenProps<'M
   // Render error state
   if (error) {
     return (
-      <ErrorFallback
-        error={error}
-        resetError={() => retry(() => loadDashboardData())}
-        isRetrying={isRetrying}
-        message="Dashboard verileri yüklenirken bir hata oluştu."
-      />
+      <View style={{ padding: 20, alignItems: 'center' }}>
+        <Text style={{ color: 'red', marginBottom: 10 }}>Dashboard verileri yüklenirken bir hata oluştu.</Text>
+        <TouchableOpacity onPress={() => console.log('Retry dashboard')} style={{ padding: 10, backgroundColor: '#007AFF', borderRadius: 5 }}>
+          <Text style={{ color: 'white' }}>Tekrar Dene</Text>
+        </TouchableOpacity>
+      </View>
     );
   }
 

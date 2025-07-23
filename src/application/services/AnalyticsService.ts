@@ -106,7 +106,7 @@ export class AnalyticsService {
         async () => {
           const existingReport = await this.analyticsRepository.getAnalyticsReport(userId, reportId);
           if (!existingReport) {
-            throw new AppError('Report not found', ErrorCode.NOT_FOUND);
+            throw new AppError(ErrorCode.NOT_FOUND, 'Report not found');
           }
 
           const updatedReport = {

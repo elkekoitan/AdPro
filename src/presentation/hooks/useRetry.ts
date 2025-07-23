@@ -3,7 +3,7 @@
  * Retry logic için React hook
  */
 
-import { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import { RetryUtility, RetryConfig } from '@/shared/utils/network-error-handler';
 import { Logger } from '@/shared/utils/debug-helpers';
 
@@ -310,77 +310,3 @@ export function useMutationWithRetry<TData, TVariables = void>(
     reset,
   };
 }
-
-/**
- * Retry button component
- */
-export const RetryButton: React.FC<{
-  onRetry: () => void;
-  isRetrying?: boolean;
-  disabled?: boolean;
-  text?: string;
-  retryingText?: string;
-  style?: any;
-}> = ({ 
-  onRetry, 
-  isRetrying = false, 
-  disabled = false,
-  text = 'Tekrar Dene',
-  retryingText = 'Deneniyor...',
-  style 
-}) => {
-  const { TouchableOpacity, Text, ActivityIndicator, View, StyleSheet } = require('react-native');
-
-  return (
-    <TouchableOpacity
-      style={[styles.retryButton, disabled && styles.retryButtonDisabled, style]}
-      onPress={onRetry}
-      disabled={disabled || isRetrying}
-    >
-      <View style={styles.retryButtonContent}>
-        {isRetrying && (
-          <ActivityIndicator 
-            size="small" 
-            color="#ffffff" 
-            style={styles.retryButtonSpinner}
-          />
-        )}
-        <Text style={[styles.retryButtonText, disabled && styles.retryButtonTextDisabled]}>
-          {isRetrying ? retryingText : text}
-        </Text>
-      </View>
-    </TouchableOpacity>
-  );
-};
-
-const styles = {
-  retryButton: {
-    backgroundColor: '#007bff',
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 6,
-    alignItems: 'center' as const,
-    justifyContent: 'center' as const,
-    minHeight: 40,
-  },
-  retryButtonDisabled: {
-    backgroundColor: '#6c757d',
-    opacity: 0.6,
-  },
-  retryButtonContent: {
-    flexDirection: 'row' as const,
-    alignItems: 'center' as const,
-  },
-  retryButtonSpinner: {
-    marginRight: 8,
-  },
-  retryButtonText: {
-    color: '#ffffff',
-    fontSize: 14,
-    fontWeight: '500' as const,
-  },
-  retryButtonTextDisabled: {
-    color: '#ffffff',
-    opacity: 0.7,
-  },
-};

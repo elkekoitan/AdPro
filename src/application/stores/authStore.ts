@@ -5,102 +5,228 @@
 
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { User } from '../../domain/entities/User';
-import { AuthTokens } from '../../domain/repositories/IAuthRepository';
-import { Logger } from '../../shared/utils/debug-helpers';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { 
+  authService, 
+  AuthUser, 
+  AuthState, 
+  LoginCredentials, 
+  RegisterCredentials 
+} from '../services/auth/SupabaseAuthService';
+import { Session } from '@supabase/supabase-js';
 
-export interface AuthState {
-  // State
-  user: User | null;
-  tokens: AuthTokens | null;
-  isAuthenticated: boolean;
-  isLoading: boolean;
-  isInitialized: boolean;
-  error: string | null;
-
+interface AuthStore extends AuthState {
   // Actions
-  setUser: (user: User | null) => void;
-  setTokens: (tokens: AuthTokens | null) => void;
-  setLoading: (loading: boolean) => void;
-  setError: (error: string | null) => void;
-  setInitialized: (initialized: boolean) => void;
-  login: (user: User, tokens: AuthTokens) => void;
-  logout: () => void;
-  updateUser: (updates: Partial<User>) => void;
+  login: (credentials: LoginCredentials) => Promise<{ success: boolean; error?: string }>;
+  register: (credentials: RegisterCredentials) => Promise<{ success: boolean; error?: string }>;
+  logout: () => Promise<void>;
+  initializeAuth: () => Promise<void>;
+  updateProfile: (updates: Partial<AuthUser>) => Promise<{ success: boolean; error?: string }>;
+  resetPassword: (email: string) => Promise<{ success: boolean; error?: string }>;
   clearError: () => void;
-  reset: () => void;
+  setLoading: (loading: boolean) => void;
+  
+  // Computed
+  isAuthenticated: boolean;
+  needsOnboarding: boolean;
 }
 
-const initialState = {
-  user: null,
-  tokens: null,
-  isAuthenticated: false,
-  isLoading: false,
-  isInitialized: false,
-  error: null,
-};
-
-export const useAuthStore = create<AuthState>()(
+export const useAuthStore = create<AuthStore>()(
   persist(
     (set, get) => ({
-      ...initialState,
+      // Initial state
+      user: null,
+      session: null,
+      isLoading: false,
+      error: null,
+      isAuthenticated: false,
+      needsOnboarding: false,
 
-      setUser: (user) => {
-        Logger.debug('AuthStore', 'Setting user', { userId: user?.id });
-        set({ 
-          user, 
-          isAuthenticated: !!user,
-          error: null 
-        });
+      // Actions
+      login: async (credentials: LoginCredentials) => {
+        set({ isLoading: true, error: null });
+
+        try {
+          const { user, error } = await authService.login(credentials);
+
+          if (error) {
+            set({ error, isLoading: false });
+            return { success: false, error };
+          }
+
+          if (user) {
+            const session = await authService.getCurrentSession();
+            set({
+              user,
+              session,
+              isAuthenticated: true,
+              needsOnboarding: !user.onboardingCompleted,
+              isLoading: false,
+              error: null,
+            });
+            return { success: true };
+          }
+
+          set({ error: 'Login failed - no user returned', isLoading: false });
+          return { success: false, error: 'Login failed' };
+
+        } catch (error: any) {
+          const errorMessage = error.message || 'Login failed';
+          set({ error: errorMessage, isLoading: false });
+          return { success: false, error: errorMessage };
+        }
       },
 
-      setTokens: (tokens) => {
-        Logger.debug('AuthStore', 'Setting tokens', { hasTokens: !!tokens });
-        set({ tokens });
+      register: async (credentials: RegisterCredentials) => {
+        set({ isLoading: true, error: null });
+
+        try {
+          const { user, error } = await authService.register(credentials);
+
+          if (error) {
+            set({ error, isLoading: false });
+            return { success: false, error };
+          }
+
+          if (user) {
+            const session = await authService.getCurrentSession();
+            set({
+              user,
+              session,
+              isAuthenticated: true,
+              needsOnboarding: !user.onboardingCompleted,
+              isLoading: false,
+              error: null,
+            });
+            return { success: true };
+          }
+
+          set({ error: 'Registration failed - no user returned', isLoading: false });
+          return { success: false, error: 'Registration failed' };
+
+        } catch (error: any) {
+          const errorMessage = error.message || 'Registration failed';
+          set({ error: errorMessage, isLoading: false });
+          return { success: false, error: errorMessage };
+        }
       },
 
-      setLoading: (isLoading) => {
-        set({ isLoading });
+      logout: async () => {
+        set({ isLoading: true });
+
+        try {
+          await authService.logout();
+          set({
+            user: null,
+            session: null,
+            isAuthenticated: false,
+            needsOnboarding: false,
+            isLoading: false,
+            error: null,
+          });
+        } catch (error: any) {
+          console.error('Logout error:', error);
+          // Even if logout fails, clear local state
+          set({
+            user: null,
+            session: null,
+            isAuthenticated: false,
+            needsOnboarding: false,
+            isLoading: false,
+            error: null,
+          });
+        }
       },
 
-      setError: (error) => {
-        Logger.error('AuthStore', 'Setting error', error);
-        set({ error, isLoading: false });
+      initializeAuth: async () => {
+        set({ isLoading: true });
+
+        try {
+          // Set up auth state listener
+          authService.onAuthStateChange((user: AuthUser | null, session: Session | null) => {
+            set({
+              user,
+              session,
+              isAuthenticated: !!user,
+              needsOnboarding: user ? !user.onboardingCompleted : false,
+              isLoading: false,
+            });
+          });
+
+          // Get current session
+          const session = await authService.getCurrentSession();
+          const user = session ? await authService.getCurrentUser() : null;
+
+          set({
+            user,
+            session,
+            isAuthenticated: !!user,
+            needsOnboarding: user ? !user.onboardingCompleted : false,
+            isLoading: false,
+          });
+
+        } catch (error: any) {
+          console.error('Auth initialization error:', error);
+          set({
+            user: null,
+            session: null,
+            isAuthenticated: false,
+            needsOnboarding: false,
+            isLoading: false,
+            error: error.message || 'Failed to initialize authentication',
+          });
+        }
       },
 
-      setInitialized: (isInitialized) => {
-        Logger.debug('AuthStore', 'Setting initialized', { isInitialized });
-        set({ isInitialized });
+      updateProfile: async (updates: Partial<AuthUser>) => {
+        set({ isLoading: true, error: null });
+
+        try {
+          const { user, error } = await authService.updateProfile(updates);
+
+          if (error) {
+            set({ error, isLoading: false });
+            return { success: false, error };
+          }
+
+          if (user) {
+            set({
+              user,
+              needsOnboarding: !user.onboardingCompleted,
+              isLoading: false,
+              error: null,
+            });
+            return { success: true };
+          }
+
+          set({ error: 'Profile update failed', isLoading: false });
+          return { success: false, error: 'Profile update failed' };
+
+        } catch (error: any) {
+          const errorMessage = error.message || 'Profile update failed';
+          set({ error: errorMessage, isLoading: false });
+          return { success: false, error: errorMessage };
+        }
       },
 
-      login: (user, tokens) => {
-        Logger.info('AuthStore', 'User logged in', { userId: user.id });
-        set({
-          user,
-          tokens,
-          isAuthenticated: true,
-          isLoading: false,
-          error: null,
-        });
-      },
+      resetPassword: async (email: string) => {
+        set({ isLoading: true, error: null });
 
-      logout: () => {
-        Logger.info('AuthStore', 'User logged out');
-        set({
-          user: null,
-          tokens: null,
-          isAuthenticated: false,
-          isLoading: false,
-          error: null,
-        });
-      },
+        try {
+          const { error } = await authService.resetPassword(email);
 
-      updateUser: (updates) => {
-        const currentUser = get().user;
-        if (currentUser) {
-          const updatedUser = { ...currentUser, ...updates };
-          Logger.debug('AuthStore', 'Updating user', { userId: currentUser.id });
-          set({ user: updatedUser });
+          if (error) {
+            set({ error, isLoading: false });
+            return { success: false, error };
+          }
+
+          set({ isLoading: false, error: null });
+          return { success: true };
+
+        } catch (error: any) {
+          const errorMessage = error.message || 'Password reset failed';
+          set({ error: errorMessage, isLoading: false });
+          return { success: false, error: errorMessage };
         }
       },
 
@@ -108,46 +234,58 @@ export const useAuthStore = create<AuthState>()(
         set({ error: null });
       },
 
-      reset: () => {
-        Logger.debug('AuthStore', 'Resetting auth store');
-        set(initialState);
+      setLoading: (loading: boolean) => {
+        set({ isLoading: loading });
       },
     }),
     {
       name: 'auth-storage',
-      storage: createJSONStorage(() => ({
-        getItem: (name) => {
-          // In React Native, we would use AsyncStorage here
-          // For now, using localStorage as fallback
-          if (typeof window !== 'undefined') {
-            return window.localStorage.getItem(name);
-          }
-          return null;
-        },
-        setItem: (name, value) => {
-          if (typeof window !== 'undefined') {
-            window.localStorage.setItem(name, value);
-          }
-        },
-        removeItem: (name) => {
-          if (typeof window !== 'undefined') {
-            window.localStorage.removeItem(name);
-          }
-        },
-      })),
+      storage: createJSONStorage(() => AsyncStorage),
       partialize: (state) => ({
         user: state.user,
-        tokens: state.tokens,
         isAuthenticated: state.isAuthenticated,
+        needsOnboarding: state.needsOnboarding,
       }),
     }
   )
 );
 
-// Selectors for better performance
-export const useAuthUser = () => useAuthStore((state) => state.user);
-export const useAuthTokens = () => useAuthStore((state) => state.tokens);
-export const useIsAuthenticated = () => useAuthStore((state) => state.isAuthenticated);
-export const useAuthLoading = () => useAuthStore((state) => state.isLoading);
-export const useAuthError = () => useAuthStore((state) => state.error);
-export const useAuthInitialized = () => useAuthStore((state) => state.isInitialized);
+// Hook for getting auth user
+export const useAuthUser = () => {
+  const user = useAuthStore((state) => state.user);
+  return user;
+};
+
+// Hook for getting auth status
+export const useAuthStatus = () => {
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const isLoading = useAuthStore((state) => state.isLoading);
+  const needsOnboarding = useAuthStore((state) => state.needsOnboarding);
+  
+  return {
+    isAuthenticated,
+    isLoading,
+    needsOnboarding,
+  };
+};
+
+// Hook for auth actions
+export const useAuthActions = () => {
+  const login = useAuthStore((state) => state.login);
+  const register = useAuthStore((state) => state.register);
+  const logout = useAuthStore((state) => state.logout);
+  const updateProfile = useAuthStore((state) => state.updateProfile);
+  const resetPassword = useAuthStore((state) => state.resetPassword);
+  const clearError = useAuthStore((state) => state.clearError);
+  const initializeAuth = useAuthStore((state) => state.initializeAuth);
+  
+  return {
+    login,
+    register,
+    logout,
+    updateProfile,
+    resetPassword,
+    clearError,
+    initializeAuth,
+  };
+};

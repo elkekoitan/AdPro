@@ -13,13 +13,14 @@ import { MainNavigator } from './MainNavigator';
 import { useAuthStore } from '../../../application/stores/authStore';
 import { AuthService } from '../../../application/services/AuthService';
 import { MockAuthRepository } from '../../../infrastructure/repositories/MockAuthRepository';
+import { SupabaseAuthRepository } from '../../../infrastructure/repositories/SupabaseAuthRepository';
 import { linkingConfig, useDeepLinking } from '../linking';
 import { Logger } from '../../../shared/utils/debug-helpers';
 
 const TAG = 'RootNavigator';
 
-// Initialize auth service
-const authRepository = new MockAuthRepository();
+// Initialize auth service with real Supabase for testing
+const authRepository = new SupabaseAuthRepository();
 const authService = new AuthService(authRepository);
 
 // Loading screen component

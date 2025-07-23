@@ -1,0 +1,14 @@
+ubuntu.appx
+supabase.exe
+supabase.tar.gz
+wsl_update_x64.msi
+node_modules
+.git
+.expo
+coverage
+e2e
+docs
+.vscode
+.trae
+*.log
+*.tmp

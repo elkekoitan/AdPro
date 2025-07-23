@@ -1,0 +1,12 @@
+<svg width="1284" height="2778" viewBox="0 0 1284 2778" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1284" height="2778" fill="#ffffff"/>
+  <g transform="translate(642, 1389)">
+    <circle cx="0" cy="0" r="200" fill="#6366F1"/>
+    <path d="M-128 -64L0 -128L128 -64V64L0 128L-128 64V-64Z" fill="white" stroke="white" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M0 -128V0" stroke="#6366F1" stroke-width="4"/>
+    <path d="M-128 -64L0 0L128 -64" stroke="#6366F1" stroke-width="4" stroke-linejoin="round"/>
+    <circle cx="0" cy="-32" r="12" fill="#6366F1"/>
+  </g>
+  <text x="642" y="1600" text-anchor="middle" fill="#6366F1" font-family="Arial, sans-serif" font-size="72" font-weight="bold">AdVantage</text>
+  <text x="642" y="1680" text-anchor="middle" fill="#64748B" font-family="Arial, sans-serif" font-size="32">AI-Powered Marketing Platform</text>
+</svg>

@@ -4,8 +4,15 @@
  * This file contains utilities for monitoring network status and handling offline mode.
  */
 
-import NetInfo, { NetInfoState, NetInfoSubscription } from '@react-native-community/netinfo';
 import { Logger } from './debug-helpers';
+
+// Web-compatible network status types
+interface NetInfoState {
+  isConnected: boolean | null;
+  type?: string;
+}
+
+type NetInfoSubscription = () => void;
 
 /**
  * Network status listener callback
@@ -40,14 +47,54 @@ class NetworkStatusManager {
    */
   private initNetworkMonitoring(): void {
     // Get initial network state
-    NetInfo.fetch().then(state => {
+    this.getNetworkState().then(state => {
       this.handleNetworkChange(state);
     });
     
     // Subscribe to network state changes
-    this.netInfoSubscription = NetInfo.addEventListener(state => {
-      this.handleNetworkChange(state);
-    });
+    this.netInfoSubscription = this.addNetworkEventListeners();
+  }
+  
+  /**
+   * Get current network state (web-compatible)
+   */
+  private async getNetworkState(): Promise<NetInfoState> {
+    if (typeof navigator !== 'undefined' && 'onLine' in navigator) {
+      return {
+        isConnected: navigator.onLine,
+        type: (navigator as any).connection?.effectiveType || 'unknown'
+      };
+    }
+    
+    // Fallback: assume connected
+    return { isConnected: true };
+  }
+  
+  /**
+   * Add network event listeners (web-compatible)
+   */
+  private addNetworkEventListeners(): NetInfoSubscription {
+    if (typeof window !== 'undefined') {
+      const handleOnline = () => {
+        this.handleNetworkChange({ isConnected: true });
+      };
+      
+      const handleOffline = () => {
+        this.handleNetworkChange({ isConnected: false });
+      };
+      
+      window.addEventListener('online', handleOnline);
+      window.addEventListener('offline', handleOffline);
+      
+      // Return cleanup function
+      return () => {
+        window.removeEventListener('online', handleOnline);
+        window.removeEventListener('offline', handleOffline);
+      };
+    }
+    
+    // Return no-op cleanup function
+    return () => {};
   }
   
   /**

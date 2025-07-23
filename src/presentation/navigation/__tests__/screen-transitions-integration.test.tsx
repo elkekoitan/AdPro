@@ -372,4 +372,3 @@ describe('Screen Transitions Integration Tests', () => {
     });
   });
 });
-</content>

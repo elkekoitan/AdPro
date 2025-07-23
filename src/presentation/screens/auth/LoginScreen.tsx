@@ -18,41 +18,25 @@ import {
   Alert,
   Image,
 } from 'react-native';
-import { AuthStackScreenProps } from '@/presentation/navigation/types';
-import { useFormValidation } from '@/presentation/hooks/useFormValidation';
-import { ValidationSchemas } from '@/shared/utils/form-validation';
-import { EmailInput, PasswordInput } from '@/presentation/components/forms/FormInput';
-import { FormErrorSummary } from '@/presentation/components/forms/FormError';
-import { useNetworkStatus } from '@/presentation/hooks/useNetworkStatus';
-import { useRetry } from '@/presentation/hooks/useRetry';
-import { ErrorBoundary } from '@/presentation/components/error/ErrorBoundary';
-import { NetworkErrorFallback } from '@/presentation/components/error/ErrorFallback';
-import { AuthService } from '@/application/services/AuthService';
-import { SupabaseAuthRepository } from '@/infrastructure/repositories/SupabaseAuthRepository';
-import { MockAuthRepository } from '@/infrastructure/repositories/MockAuthRepository';
-import { Logger } from '@/shared/utils/debug-helpers';
-import { AppError, ErrorCode } from '@/shared/types/errors';
-import { useAuthStore } from '@/application/stores/authStore';
+import { AuthStackScreenProps } from '../../navigation/types';
+import { useFormValidation } from '../../hooks/useFormValidation';
+import { ValidationSchemas } from '../../../shared/utils/form-validation';
+import { EmailInput, PasswordInput } from '../../components/forms/FormInput';
+import { FormErrorSummary } from '../../components/forms/FormError';
+import { useNetworkStatus } from '../../hooks/useNetworkStatus';
+import { useRetry } from '../../hooks/useRetry';
+import { ErrorBoundary } from '../../components/error/ErrorBoundary';
+import { NetworkErrorFallback } from '../../components/error/ErrorFallback';
+import { AuthService } from '../../../application/services/AuthService';
+import { SupabaseAuthRepository } from '../../../infrastructure/repositories/SupabaseAuthRepository';
+import { MockAuthRepository } from '../../../infrastructure/repositories/MockAuthRepository';
+import { Logger } from '../../../shared/utils/debug-helpers';
+import { AppError, ErrorCode } from '../../../shared/types/errors';
+import { useAuthStore } from '../../../application/stores/authStore';
 
-// Initialize auth service with appropriate repository
+// Initialize auth service with real Supabase for testing
 // In a real app, this would be injected via dependency injection
-const authRepository = __DEV__ 
-  ? new MockAuthRepository() 
-  : new SupabaseAuthRepository({
-      auth: {
-        signInWithPassword: async (credentials) => {
-          // Mock implementation for Supabase client
-          if (!credentials) throw new Error('Invalid credentials');
-          return { data: { user: {}, session: {} }, error: null };
-        },
-        signUp: async () => ({ data: { user: {}, session: {} }, error: null }),
-        signOut: async () => ({ error: null }),
-        getUser: async () => ({ data: { user: null }, error: null }),
-        refreshSession: async () => ({ data: { session: {} }, error: null }),
-        resetPasswordForEmail: async () => ({ error: null }),
-        updateUser: async () => ({ data: { user: {} }, error: null }),
-      }
-    });
+const authRepository = new SupabaseAuthRepository();
 
 const authService = new AuthService(authRepository);
 
@@ -206,8 +190,8 @@ export const LoginScreen: React.FC<AuthStackScreenProps<'Login' | 'SignIn'>> = (
     validateField('password');
     
     // Submit after a short delay to show the filled fields
-    setTimeout(() => {
-      handleSubmit(handleLogin)();
+    setTimeout(async () => {
+      await handleLogin();
     }, 300);
   }, [setValue, setTouched, validateField, handleSubmit, handleLogin]);
 

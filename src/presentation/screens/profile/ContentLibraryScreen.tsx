@@ -13,9 +13,12 @@ import {
   ActivityIndicator,
   Image,
   Alert,
-  ScrollView
+  ScrollView,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+
+// Type alias to handle Ionicons typing issues
+const IoniconsIcon = Ionicons as any;
 import { useNavigation } from '@react-navigation/native';
 import type { NavigationProp } from '@react-navigation/native';
 import type { ProfileStackParamList } from '../../navigation/types';
@@ -331,7 +334,7 @@ export function ContentLibraryScreen() {
           <Image source={{ uri: item.thumbnail }} style={styles.contentThumbnail} />
         ) : (
           <View style={[styles.contentThumbnailPlaceholder, { backgroundColor: getStatusColor(item.status) + '20' }]}>
-            <Ionicons name={getContentTypeIcon(item.type)} size={24} color={getStatusColor(item.status)} />
+            <IoniconsIcon name={getContentTypeIcon(item.type)} size={24} color={getStatusColor(item.status)} />
           </View>
         )}
         
@@ -340,7 +343,7 @@ export function ContentLibraryScreen() {
           
           <View style={styles.contentMeta}>
             <View style={styles.platformBadge}>
-              <Ionicons name={getPlatformIcon(item.platform)} size={12} color="#FFFFFF" />
+              <IoniconsIcon name={getPlatformIcon(item.platform)} size={12} color="#FFFFFF" />
               <Text style={styles.platformText}>{item.platform}</Text>
             </View>
             
@@ -361,22 +364,22 @@ export function ContentLibraryScreen() {
       {item.status === 'published' && (
         <View style={styles.engagementContainer}>
           <View style={styles.engagementItem}>
-            <Ionicons name="heart" size={14} color="#F44336" />
+            <IoniconsIcon name="heart" size={14} color="#F44336" />
             <Text style={styles.engagementText}>{item.engagement.likes}</Text>
           </View>
           
           <View style={styles.engagementItem}>
-            <Ionicons name="chatbubble" size={14} color="#2196F3" />
+            <IoniconsIcon name="chatbubble" size={14} color="#2196F3" />
             <Text style={styles.engagementText}>{item.engagement.comments}</Text>
           </View>
           
           <View style={styles.engagementItem}>
-            <Ionicons name="share" size={14} color="#4CAF50" />
+            <IoniconsIcon name="share" size={14} color="#4CAF50" />
             <Text style={styles.engagementText}>{item.engagement.shares}</Text>
           </View>
           
           <View style={styles.engagementItem}>
-            <Ionicons name="eye" size={14} color="#9E9E9E" />
+            <IoniconsIcon name="eye" size={14} color="#9E9E9E" />
             <Text style={styles.engagementText}>{item.engagement.views}</Text>
           </View>
         </View>
@@ -392,17 +395,17 @@ export function ContentLibraryScreen() {
       
       <View style={styles.contentFooter}>
         <TouchableOpacity style={styles.actionButton}>
-          <Ionicons name="create-outline" size={16} color="#007AFF" />
+          <IoniconsIcon name="create-outline" size={16} color="#007AFF" />
           <Text style={styles.actionButtonText}>Düzenle</Text>
         </TouchableOpacity>
         
         <TouchableOpacity style={styles.actionButton}>
-          <Ionicons name="copy-outline" size={16} color="#007AFF" />
+          <IoniconsIcon name="copy-outline" size={16} color="#007AFF" />
           <Text style={styles.actionButtonText}>Çoğalt</Text>
         </TouchableOpacity>
         
         <TouchableOpacity style={styles.actionButton}>
-          <Ionicons name="trash-outline" size={16} color="#FF3B30" />
+          <IoniconsIcon name="trash-outline" size={16} color="#FF3B30" />
           <Text style={[styles.actionButtonText, { color: '#FF3B30' }]}>Sil</Text>
         </TouchableOpacity>
       </View>
@@ -426,7 +429,7 @@ export function ContentLibraryScreen() {
           ]}
           onPress={() => handleTypeToggle(type)}
         >
-          <Ionicons 
+          <IoniconsIcon 
             name={getContentTypeIcon(type)} 
             size={14} 
             color={selectedTypes.includes(type) ? '#FFFFFF' : '#666666'} 
@@ -452,7 +455,7 @@ export function ContentLibraryScreen() {
           ]}
           onPress={() => handlePlatformToggle(platform)}
         >
-          <Ionicons 
+          <IoniconsIcon 
             name={getPlatformIcon(platform)} 
             size={14} 
             color={selectedPlatforms.includes(platform) ? '#FFFFFF' : '#666666'} 
@@ -495,7 +498,7 @@ export function ContentLibraryScreen() {
           style={[styles.filterChip, styles.clearFilterChip]}
           onPress={handleClearFilters}
         >
-          <Ionicons name="close-circle" size={14} color="#FFFFFF" />
+          <IoniconsIcon name="close-circle" size={14} color="#FFFFFF" />
           <Text style={[styles.filterChipText, styles.filterChipTextSelected]}>
             Temizle
           </Text>
@@ -568,7 +571,7 @@ export function ContentLibraryScreen() {
             style={styles.createButton}
             onPress={handleCreateContent}
           >
-            <Ionicons name="add" size={24} color="#FFFFFF" />
+            <IoniconsIcon name="add" size={24} color="#FFFFFF" />
           </TouchableOpacity>
         </View>
         
@@ -578,7 +581,7 @@ export function ContentLibraryScreen() {
         {/* Network Status Warning */}
         {!isConnected && (
           <View style={styles.offlineWarning}>
-            <Ionicons name="cloud-offline" size={16} color="#FFFFFF" />
+            <IoniconsIcon name="cloud-offline" size={16} color="#FFFFFF" />
             <Text style={styles.offlineText}>
               Çevrimdışı mod - Veriler güncel olmayabilir
             </Text>
