@@ -2,7 +2,7 @@
 
 ## Frontend Framework
 - **React Native 0.73+** with **TypeScript 5.0+**
-- **Expo SDK 50+** for cross-platform development
+- **Expo SDK 53** for cross-platform development
 - **NativeWind 4.0+** (Tailwind CSS for React Native)
 - **Tamagui 1.90+** for universal design system
 
