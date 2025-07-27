@@ -4,13 +4,7 @@ export default {
     slug: "adpro",
     version: "1.0.0",
     orientation: "portrait",
-    icon: "./assets/icon.svg",
     userInterfaceStyle: "light",
-    splash: {
-      image: "./assets/splash.svg",
-      resizeMode: "contain",
-      backgroundColor: "#ffffff"
-    },
     assetBundlePatterns: [
       "**/*"
     ],
@@ -18,13 +12,8 @@ export default {
       supportsTablet: true
     },
     android: {
-      adaptiveIcon: {
-        foregroundImage: "./assets/adaptive-icon.svg",
-        backgroundColor: "#ffffff"
-      }
     },
     web: {
-      favicon: "./assets/favicon.svg",
       bundler: "metro"
     },
     plugins: [
